@@ -12,5 +12,5 @@ def load_config() -> dict:
     return {
         "OPEN_AI_API_KEY": openai_api_key,
         "MODEL": "gpt-4o-mini",
-        "TEMPERATURE": 0
+        "TEMPERATURE": 0,
     }

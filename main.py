@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.config import load_config
+from utils.env_config import load_config
 from services.chat_service import ChatService
 
 
