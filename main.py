@@ -1,6 +1,21 @@
 import streamlit as st
+from sqlalchemy import text
+
 from utils.env_config import load_config
 from services.chat_service import ChatService
+from utils.database_config import get_session
+
+session = get_session()
+
+try:
+    query = text("SELECT TOP 10 * FROM EmpresasGrupo;")
+    result = session.execute(query).fetchall()
+    for row in result:
+        print(row)
+except Exception as e:
+    print(f"Error al consultar la base de datos: {e}")
+finally:
+    session.close()
 
 
 def init_session_state() -> None:
