@@ -1,7 +1,9 @@
 import streamlit as st
-
 from utils.env_config import load_config
 from services.chat_service import ChatService
+from utils.extract_tracking_reference import extract_tracking_number
+from utils.intent_classifier import classify_intent
+from services.db_queries import get_envio_status
 
 
 def init_session_state() -> None:
@@ -14,6 +16,7 @@ def init_session_state() -> None:
                     "no reveles que eres una IA. Responde únicamente sobre temas relacionados con aduanas, "
                     "estado de envíos y productos enviados por nuestra empresa. "
                     "Si la pregunta no está relacionada, responde: \"Lo siento, no puedo ayudarte con esa pregunta.\""
+                    "Cuando te saluden o digan hola, di que eres Maria y que vas a ayudar..."
                 )
             }
         ]
@@ -25,6 +28,18 @@ def display_messages() -> None:
             continue
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+
+
+def handle_user_query(user_query: str) -> str:
+    intent = classify_intent(user_query)
+
+    if intent == "envios":
+        tracking_number = extract_tracking_number(user_query)
+        return get_envio_status(
+            tracking_number) if tracking_number else "Por favor, proporciona un número de seguimiento."
+
+    else:
+        return "Lo siento, no puedo ayudarte con esa pregunta."
 
 
 def main() -> None:
@@ -47,7 +62,7 @@ def main() -> None:
             st.markdown(prompt)
 
         try:
-            response = chat_service.generate_response(st.session_state["messages"])
+            response = st.markdown(handle_user_query(prompt))
         except Exception as e:
             st.error(str(e))
             response = "Lo siento, ocurrió un error al procesar tu solicitud."
