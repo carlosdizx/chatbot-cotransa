@@ -4,6 +4,8 @@ from services.chat_service import ChatService
 from utils.handle_user_query import handle_user_query
 from interfaces.chat_service_interface import ChatServiceStrategy
 from services.file_processing_service import process_file
+from services.pdf_extractor_service import extract_text_from_pdf
+import os
 
 
 def init_session_state() -> None:
@@ -16,7 +18,7 @@ def init_session_state() -> None:
                     "Responde únicamente sobre temas relacionados con aduanas, estado de envíos y productos enviados "
                     "por nuestra empresa. "
                     "Analiza la consulta del usuario y determina si se requiere realizar una consulta a la base de "
-                    "datos."
+                    "datos. "
                     "Si es así, responde únicamente en formato JSON indicando la acción y los parámetros necesarios. "
                     "Por ejemplo, si se requiere consultar el estado de un envío, responde exactamente de esta forma: "
                     "\n\n"
@@ -52,11 +54,16 @@ def main() -> None:
 
     uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
     if uploaded_file is not None:
+        file_extension = os.path.splitext(uploaded_file.name)[1].lower()
         file_bytes = uploaded_file.read()
-        try:
-            file_text = file_bytes.decode("utf-8")
-        except Exception:
-            file_text = file_bytes.decode("latin-1")
+
+        if file_extension == ".pdf":
+            file_text = extract_text_from_pdf(file_bytes)
+        else:
+            try:
+                file_text = file_bytes.decode("utf-8")
+            except Exception:
+                file_text = file_bytes.decode("latin-1")
 
         if st.button("Procesar archivo"):
             try:
