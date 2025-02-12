@@ -3,6 +3,7 @@ from utils.env_config import load_config
 from services.chat_service import ChatService
 from utils.handle_user_query import handle_user_query
 from interfaces.chat_service_interface import ChatServiceStrategy
+from services.file_processing_service import process_file
 
 
 def init_session_state() -> None:
@@ -11,18 +12,17 @@ def init_session_state() -> None:
             {
                 "role": "system",
                 "content": (
-                    "Eres un chatbot, te llamas MarIA, tienes que hablar como si fueras humana"
+                    "Eres un chatbot, te llamas MarIA, tienes que hablar como si fueras humana. "
                     "Responde únicamente sobre temas relacionados con aduanas, estado de envíos y productos enviados "
-                    "por nuestra"
-                    "empresa."
-                    "Analiza la consultas del usuario y determina si se requiere realizar una consulta "
-                    "a la base de datos. "
+                    "por nuestra empresa. "
+                    "Analiza la consulta del usuario y determina si se requiere realizar una consulta a la base de "
+                    "datos."
                     "Si es así, responde únicamente en formato JSON indicando la acción y los parámetros necesarios. "
-                    "Por ejemplo,"
-                    "si se requiere consultar el estado de un envío, responde exactamente de esta forma: \n\n"
+                    "Por ejemplo, si se requiere consultar el estado de un envío, responde exactamente de esta forma: "
+                    "\n\n"
                     '{"action": "get_envio_status", "response": "<número>"}\n\n'
                     "Si no es necesaria una consulta a la base de datos, responde únicamente con un mensaje natural "
-                    "para el de la siguiente forma en formato JSON:\n\n"
+                    "en formato JSON:\n\n"
                     '{"action": "natural_response", "response": "<response>"}\n\n'
                 )
             }
@@ -49,6 +49,26 @@ def main() -> None:
 
     init_session_state()
     display_messages()
+
+    uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
+    if uploaded_file is not None:
+        file_bytes = uploaded_file.read()
+        try:
+            file_text = file_bytes.decode("utf-8")
+        except Exception:
+            file_text = file_bytes.decode("latin-1")
+
+        st.write("Contenido del archivo (vista previa):")
+        st.text(file_text[:500])
+
+        if st.button("Procesar archivo"):
+            try:
+                file_response = process_file(file_text, chat_service)
+                st.session_state["messages"].append({"role": "assistant", "content": file_response})
+                with st.chat_message("assistant"):
+                    st.markdown(file_response)
+            except Exception as e:
+                st.error(f"Error al procesar el archivo: {e}")
 
     prompt = st.chat_input("Escribe tu mensaje...")
     if prompt:
