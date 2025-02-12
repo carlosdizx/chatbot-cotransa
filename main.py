@@ -2,6 +2,7 @@ import streamlit as st
 from utils.env_config import load_config
 from services.chat_service import ChatService
 from utils.handle_user_query import handle_user_query
+from interfaces.chat_service_interface import ChatServiceStrategy
 
 
 def init_session_state() -> None:
@@ -38,9 +39,9 @@ def display_messages() -> None:
 
 def main() -> None:
     st.title("Asistente Contransa")
-
     config = load_config()
-    chat_service = ChatService(
+
+    chat_service: ChatServiceStrategy = ChatService(
         api_key=config["OPEN_AI_API_KEY"],
         model=config["MODEL"],
         temperature=config["TEMPERATURE"]
@@ -56,7 +57,8 @@ def main() -> None:
             st.markdown(prompt)
 
         try:
-            response = handle_user_query(chat_service.generate_response(st.session_state["messages"]))
+            provider_response = chat_service.generate_response(st.session_state["messages"])
+            response = handle_user_query(provider_response)
         except Exception as e:
             st.error(str(e))
             response = "Lo siento, ocurrió un error al procesar tu solicitud."
