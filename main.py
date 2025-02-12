@@ -58,12 +58,9 @@ def main() -> None:
         except Exception:
             file_text = file_bytes.decode("latin-1")
 
-        st.write("Contenido del archivo (vista previa):")
-        st.text(file_text[:500])
-
         if st.button("Procesar archivo"):
             try:
-                file_response = process_file(file_text, chat_service)
+                file_response = handle_user_query(process_file(file_text, chat_service))
                 st.session_state["messages"].append({"role": "assistant", "content": file_response})
                 with st.chat_message("assistant"):
                     st.markdown(file_response)
