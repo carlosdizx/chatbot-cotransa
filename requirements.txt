@@ -3,6 +3,4 @@ streamlit
 python-dotenv
 sqlalchemy
 pyodbc
-requests
-reportlab
 PyPDF2
