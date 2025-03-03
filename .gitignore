@@ -5,3 +5,5 @@ data/
 **.db
 
 .env
+
+utils/pdf_urls.txt
