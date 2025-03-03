@@ -42,25 +42,43 @@ def embed_text():
 
     df = pd.DataFrame(fragmentos, columns=["text"])
     df["embedding"] = df["text"].apply(lambda x: get_embedding(x))  # Obtener embeddings
-    df.to_csv(EMBEDDINGS_FILE, index=False)  # Guardar en CSV para no recalcular
+
+    # Convertimos el embedding a string correctamente antes de guardarlo
+    df["embedding"] = df["embedding"].apply(lambda x: ",".join(map(str, x)))
+
+    # Guardar en CSV asegurando que los embeddings sean bien formateados
+    df.to_csv(EMBEDDINGS_FILE, index=False)
+
     return df
 
+
 def load_embeddings():
-    """Carga los embeddings desde un archivo CSV."""
+    """Carga los embeddings desde un archivo CSV y los convierte a `np.array`."""
     if os.path.exists(EMBEDDINGS_FILE):
         df = pd.read_csv(EMBEDDINGS_FILE)
-        df["embedding"] = df["embedding"].apply(lambda x: np.fromstring(x[1:-1], sep=" "))  # Convertir string a array
+
+        # Convertimos la columna de embeddings de string a np.array
+        df["embedding"] = df["embedding"].apply(lambda x: np.array([float(i) for i in x.split(",")]))
+
+        # Filtramos cualquier embedding que no tenga tamaño correcto (1536)
+        df = df[df["embedding"].apply(lambda x: len(x) == 1536)]
+
         return df
     else:
         return embed_text()  # Si no hay embeddings, generarlos
+
 
 def find_relevant_regulation(query: str, n_resultados=3):
     """Busca los fragmentos de normativa más relevantes usando embeddings."""
     df = load_embeddings()  # Cargar normativas y embeddings
     query_embedding = get_embedding(query)  # Obtener embedding de la consulta
 
+    # Filtrar cualquier embedding que no tenga la dimensión correcta
+    df = df[df["embedding"].apply(lambda x: len(x) == 1536)]
+
     df["similaridad"] = df["embedding"].apply(lambda x: cosine_similarity(x, query_embedding))
     df = df.sort_values(by="similaridad", ascending=False)
 
     fragmentos_relevantes = df.iloc[:n_resultados]["text"].tolist()  # Tomar los N fragmentos más relevantes
     return " ".join(fragmentos_relevantes)  # Unir los fragmentos relevantes
+
