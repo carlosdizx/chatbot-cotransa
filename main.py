@@ -7,7 +7,6 @@ from services.file_processing_service import process_file
 from services.pdf_extractor_service import extract_text_from_pdf
 import os
 from utils.prompt import prompt_init, suggestion
-from services.dynamodb_queries import get_regulation_prompt
 
 
 def init_session_state() -> None:
@@ -18,7 +17,6 @@ def init_session_state() -> None:
                 "content": prompt_init
             },
         ]
-        st.session_state["messages"].extend(get_regulation_prompt())
 
 
 def display_messages() -> None:
