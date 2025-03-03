@@ -6,6 +6,7 @@ from interfaces.chat_service_interface import ChatServiceStrategy
 from services.file_processing_service import process_file
 from services.pdf_extractor_service import extract_text_from_pdf
 import os
+from utils.prompt import prompt_init
 
 
 def init_session_state() -> None:
@@ -13,20 +14,7 @@ def init_session_state() -> None:
         st.session_state["messages"] = [
             {
                 "role": "system",
-                "content": (
-                    "Eres un chatbot, te llamas MarIA, tienes que hablar como si fueras humana. "
-                    "Responde únicamente sobre temas relacionados con aduanas, estado de envíos y productos enviados "
-                    "por nuestra empresa. "
-                    "Analiza la consulta del usuario y determina si se requiere realizar una consulta a la base de "
-                    "datos. "
-                    "Si es así, responde únicamente en formato JSON indicando la acción y los parámetros necesarios. "
-                    "Por ejemplo, si se requiere consultar el estado de un envío, responde exactamente de esta forma: "
-                    "\n\n"
-                    '{"action": "get_envio_status", "response": "<número>"}\n\n'
-                    "Si no es necesaria una consulta a la base de datos, responde únicamente con un mensaje natural "
-                    "en formato JSON:\n\n"
-                    '{"action": "natural_response", "response": "<response>"}\n\n'
-                )
+                "content": prompt_init
             }
         ]
 
@@ -53,6 +41,8 @@ def main() -> None:
     display_messages()
 
     uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
+    if uploaded_file is None and "request_file" in st.session_state["messages"][-1]["content"]:
+        st.warning("Puedes subir un archivo con la facturas o si necesitas resolver una duda sobre normativas.")
     if uploaded_file is not None:
         file_extension = os.path.splitext(uploaded_file.name)[1].lower()
         file_bytes = uploaded_file.read()
