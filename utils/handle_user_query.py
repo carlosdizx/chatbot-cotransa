@@ -1,9 +1,10 @@
 import json
 from services.db_queries import get_envio_status
+from services.embeddings_service import find_relevant_regulation  # Ahora usamos esta función
 
 
 def handle_user_query(user_query: str):
-
+    """Procesa la consulta del usuario."""
     try:
         jsonData = json.loads(user_query)
     except Exception as e:
@@ -16,7 +17,8 @@ def handle_user_query(user_query: str):
             return get_envio_status(jsonData["response"])
 
         elif jsonData["action"] == "get_regulation_info":
-            return f"Consultando regulaciones: {jsonData['query']} en la base de datos de DynamoDB."
+            normativa_relevante = find_relevant_regulation(jsonData["query"])
+            return f"Basado en nuestras normativas, la respuesta es:\n\n{normativa_relevante}"
 
         elif jsonData["action"] == "request_file":
             return jsonData["response"]
