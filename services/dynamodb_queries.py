@@ -25,9 +25,9 @@ def get_regulation_prompt() -> list:
         if "content" in item:
             results.append({
                 "role": "system",
-                "content": (
-                    "Esta es una normativas, cada normativa y contiene la siguiente información: ", item["content"]
-                )
+                "content": f"Esta es una normativas, cada normativa y contiene la siguiente"
+                           f" información: {item["content"]}",
+
             })
 
     return results
