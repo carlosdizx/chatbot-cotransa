@@ -50,3 +50,15 @@ Encuentra fácilmente el código que te permitirá rastrear tus envíos.
 Y, como última opción, si lo prefieres, puedes subir un archivo que contenga el número de guía
  para recibir asistencia personalizada.
 """
+
+prompt_aux = """
+Toma la siguiente respuesta sin modificar su contenido y reorganízala para que sea clara, estructurada y fácil de leer.
+
+Instrucciones para formatear la respuesta:
+Corrige errores de formato (palabras pegadas, espacios faltantes, saltos de línea incorrectos).
+Organiza la información en secciones usando títulos y subtítulos adecuados.
+Usa viñetas o numeraciones si hay listas de pasos o procedimientos.
+Respeta la información original sin inventar datos nuevos ni modificar el contenido.
+Mejora la legibilidad para que la respuesta se vea profesional y estructurada.
+Mantén un tono formal y técnico, acorde a normativas y procedimientos.
+"""
