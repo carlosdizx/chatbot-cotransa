@@ -17,15 +17,17 @@ TABLE_NAME = os.getenv("DYNAMODB_TABLE_NAME")
 table = dynamodb.Table(TABLE_NAME)
 
 
-def get_regulation_info() -> list:
+def get_regulation_prompt() -> list:
     response = table.scan()
 
     results = []
     for item in response.get("Items", []):
         if "content" in item:
             results.append({
-                "id": item.get("id"),
-                "content": item["content"]
+                "role": "system",
+                "content": (
+                    "Esta es una normativas, cada normativa y contiene la siguiente información: ", item["content"]
+                )
             })
 
     return results

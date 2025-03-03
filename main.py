@@ -7,6 +7,7 @@ from services.file_processing_service import process_file
 from services.pdf_extractor_service import extract_text_from_pdf
 import os
 from utils.prompt import prompt_init, suggestion
+from services.dynamodb_queries import get_regulation_prompt
 
 
 def init_session_state() -> None:
@@ -15,8 +16,9 @@ def init_session_state() -> None:
             {
                 "role": "system",
                 "content": prompt_init
-            }
+            },
         ]
+        st.session_state["messages"].extend(get_regulation_prompt())
 
 
 def display_messages() -> None:
@@ -75,6 +77,7 @@ def main() -> None:
             response = handle_user_query(provider_response)
         except Exception as e:
             st.error(str(e))
+            print(e)
             response = "Lo siento, ocurrió un error al procesar tu solicitud."
 
         st.session_state["messages"].append({"role": "assistant", "content": response})
