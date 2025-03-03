@@ -5,3 +5,4 @@ sqlalchemy
 pyodbc
 PyPDF2
 boto3
+requests
