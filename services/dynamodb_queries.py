@@ -17,15 +17,15 @@ TABLE_NAME = os.getenv("DYNAMODB_TABLE_NAME")
 table = dynamodb.Table(TABLE_NAME)
 
 
-def get_regulation_info(query: str) -> list:
+def get_regulation_info() -> list:
     response = table.scan()
 
     results = []
     for item in response.get("Items", []):
-        if "content" in item and query.lower() in item["content"].lower():
+        if "content" in item:
             results.append({
                 "id": item.get("id"),
                 "content": item["content"]
             })
 
-    return results if results else [{"id": None, "content": "No encontré información relevante en las regulaciones."}]
+    return results
