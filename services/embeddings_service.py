@@ -9,7 +9,7 @@ from utils.env_config import load_config
 OPENAI_API_KEY = load_config()["OPEN_AI_API_KEY"]
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
-EMBEDDINGS_FILE = "embeddings_cache.csv"  # Archivo donde guardaremos los embeddings
+EMBEDDINGS_FILE = "normative_embeddings_cache.csv"  # Archivo donde guardaremos los embeddings
 
 
 def get_embedding(text: str, model="text-embedding-ada-002") -> list:
