@@ -23,11 +23,6 @@ def get_regulation_prompt() -> list:
     results = []
     for item in response.get("Items", []):
         if "content" in item:
-            results.append({
-                "role": "system",
-                "content": f"Esta es una normativas, cada normativa y contiene la siguiente"
-                           f" información: {item["content"]}",
-
-            })
+            results.append(item["content"])
 
     return results
