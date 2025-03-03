@@ -4,3 +4,4 @@ python-dotenv
 sqlalchemy
 pyodbc
 PyPDF2
+boto3
