@@ -40,6 +40,7 @@ def main() -> None:
     init_session_state()
     display_messages()
     st.info(suggestion)
+
     uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
     if uploaded_file is not None:
         file_extension = os.path.splitext(uploaded_file.name)[1].lower()
@@ -63,14 +64,17 @@ def main() -> None:
                 st.error(f"Error al procesar el archivo: {e}")
 
     prompt = st.chat_input("Escribe tu mensaje...")
+
     if prompt:
         st.session_state["messages"].append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
         try:
-            provider_response = chat_service.generate_response(st.session_state["messages"])
-            response = handle_user_query(provider_response)
+            with st.status("Procesando tu consulta...", expanded=True) as status:
+                provider_response = chat_service.generate_response(st.session_state["messages"])
+                response = handle_user_query(provider_response)
+                status.update(label="¡Respuesta generada!", state="complete", expanded=False)
         except Exception as e:
             st.error(str(e))
             print(e)
