@@ -7,3 +7,4 @@ data/
 .env
 
 utils/pdf_urls.txt
+**.csv
