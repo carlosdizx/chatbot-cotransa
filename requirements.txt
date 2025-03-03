@@ -6,3 +6,6 @@ pyodbc
 PyPDF2
 boto3
 requests
+openai
+numpy
+pandas
