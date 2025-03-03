@@ -11,14 +11,11 @@ load_dotenv()
 
 # Configuración desde .env
 TABLE_NAME = os.getenv("DYNAMODB_TABLE_NAME")
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 PDF_LIST_FILE = os.getenv("PDF_LIST_FILE", "pdf_urls.txt")
 
 # Configurar cliente de AWS
-dynamodb = boto3.resource("dynamodb", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY,
-                          region_name=AWS_REGION)
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 
 table = dynamodb.Table(TABLE_NAME)
 
