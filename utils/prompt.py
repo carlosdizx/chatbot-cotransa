@@ -21,5 +21,32 @@ favor, sube un archivo con los datos de la factura para encontrar tu número de 
 responde en JSON: {"action": "natural_response", "response": "<respuesta en lenguaje natural>"}
 
 
-Responde **únicamente en formato JSON** sin agregar explicaciones adicionales.
+Responde **únicamente en formato JSON** sin agregar explicaciones adicionales. Recuerda json
+no agregues nada fuera de los "{}" porque lo usare el json para procesar la respuesta que me des, entoces
+solo necesito json.
+
+IMPORTANTE:
+
+Devuelve únicamente JSON válido.
+No agregues texto fuera del JSON.
+No uses explicaciones ni comentarios.
+
+Ejemplo de respuesta válida:
+{"action": "get_envio_status", "response": "PBEM059485"}
+"""
+
+suggestion = """
+¡Bienvenido a nuestro servicio de atención! Con nosotros podrás:
+
+Consultar el estado de tu pedido:
+Conoce en tiempo real en qué etapa se encuentra tu envío y recibe actualizaciones detalladas.
+
+Resolver dudas sobre normativas legales:
+Obtén respuestas claras y actualizadas sobre cualquier consulta relacionada con la legislación vigente.
+
+Obtener el número de guía de tus productos:
+Encuentra fácilmente el código que te permitirá rastrear tus envíos.
+
+Y, como última opción, si lo prefieres, puedes subir un archivo que contenga el número de guía
+ para recibir asistencia personalizada.
 """

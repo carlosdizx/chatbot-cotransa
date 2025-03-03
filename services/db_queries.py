@@ -3,6 +3,7 @@ from utils.database_config import get_session
 
 
 def get_envio_status(tracking_number: str):
+    print("entre aca")
     session = get_session()
     try:
         query = text(f"SELECT * FROM EnviosActivos WHERE Ref_Partida = :tracking_number;")

@@ -6,7 +6,7 @@ from interfaces.chat_service_interface import ChatServiceStrategy
 from services.file_processing_service import process_file
 from services.pdf_extractor_service import extract_text_from_pdf
 import os
-from utils.prompt import prompt_init
+from utils.prompt import prompt_init, suggestion
 
 
 def init_session_state() -> None:
@@ -42,7 +42,7 @@ def main() -> None:
 
     uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
     if uploaded_file is None and "request_file" in st.session_state["messages"][-1]["content"]:
-        st.warning("Puedes subir un archivo con la facturas o si necesitas resolver una duda sobre normativas.")
+        st.info(suggestion)
     if uploaded_file is not None:
         file_extension = os.path.splitext(uploaded_file.name)[1].lower()
         file_bytes = uploaded_file.read()
