@@ -41,7 +41,7 @@ def main() -> None:
     display_messages()
     st.info(suggestion)
 
-    uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["txt", "pdf", "csv", "docx"])
+    uploaded_file = st.file_uploader("Carga un archivo para procesar", type=["pdf"])
     if uploaded_file is not None:
         file_extension = os.path.splitext(uploaded_file.name)[1].lower()
         file_bytes = uploaded_file.read()
