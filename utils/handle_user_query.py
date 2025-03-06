@@ -1,5 +1,5 @@
 import json
-from services.db_queries import get_envio_status
+from services.db_queries import get_envio_status, search_company
 from services.embeddings_service import find_relevant_regulation
 from services.chat_service import ChatService  # Para llamar a la IA
 from utils.env_config import load_config
@@ -51,6 +51,9 @@ def handle_user_query(user_query: str):
 
         elif jsonData["action"] == "natural_response":
             return jsonData["response"]
+
+        elif jsonData["action"] == "search_company":
+            return search_company(jsonData["query"])
 
         else:
             return "No entendí tu solicitud. ¿Puedes reformularla?"
