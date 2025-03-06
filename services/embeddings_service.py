@@ -34,7 +34,6 @@ def download_embeddings():
         # Convertir el CSV descargado directamente en DataFrame sin guardarlo en disco
         df = pd.read_csv(io.StringIO(response.text))
 
-        print("📥 Embeddings descargados exitosamente desde CloudFront.")
         return df
 
     except requests.exceptions.RequestException as e:
@@ -46,7 +45,6 @@ def load_embeddings():
     """Carga los embeddings desde CloudFront."""
     df = download_embeddings()
     if df is None:
-        print("⚠️ No se pudo descargar el archivo de embeddings. Es posible que no exista en S3.")
         return None
 
     # Convertimos la columna de embeddings de string a np.array
