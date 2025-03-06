@@ -58,12 +58,16 @@ def search_company(query: str):
 
         if results:
             response = "### Empresas encontradas:\n\n"
-            response += "| Empresa | CIF/NIF | EORI | Estado |\n"
-            response += "|---------|---------|------|--------|\n"
+            response += "| Empresa | CIF/NIF | EORI | Propietario | Estado | Motivo de Bloqueo | Fecha de Bloqueo |\n"
+            response += "|---------|---------|------|------------|--------|------------------|----------------|\n"
 
             for company in results:
                 estado = "🚫 **Bloqueada**" if company.FechaBloqueo else "✅ **Activa**"
-                response += f"| **{company.Nombre_Empresa}** | {company.CIF_NIF} | {company.EORI or 'N/A'} | {estado} |\n"
+                fecha_bloqueo = company.FechaBloqueo.strftime("%Y-%m-%d") if company.FechaBloqueo else "N/A"
+                motivo_bloqueo = company.MotivoBloqueo if company.MotivoBloqueo else "N/A"
+
+                response += (f"| **{company.Nombre_Empresa}** | {company.CIF_NIF} | {company.EORI or 'N/A'} "
+                             f"| {company.Propietario or 'N/A'} | {estado} | {motivo_bloqueo} | {fecha_bloqueo} |\n")
 
             response += "\n\n📌 *Si necesitas más detalles de alguna empresa, proporciona el CIF/NIF específico.*"
             return response
