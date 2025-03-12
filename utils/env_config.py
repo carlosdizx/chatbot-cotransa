@@ -31,6 +31,3 @@ def load_config() -> dict:
         "DB_USERNAME": os.getenv("DB_USERNAME"),
         "DB_PASSWORD": os.getenv("DB_PASSWORD"),
     }
-
-
-load_config()
