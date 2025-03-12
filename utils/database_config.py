@@ -1,34 +1,33 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 
-load_dotenv()
+from utils.env_config import load_config
+
+config = load_config()
 
 
-def get_db_connection_string() -> str:
+def get_db_connection_string(db_name: str) -> str:
+    db_server = config["DB_SERVER"]
+    db_username = config["DB_USERNAME"]
+    db_password = config["DB_PASSWORD"]
 
-    db_server = os.environ.get("DB_SERVER")
-    db_database = os.environ.get("DB_DATABASE")
-    db_username = os.environ.get("DB_USERNAME")
-    db_password = os.environ.get("DB_PASSWORD")
+    if db_name not in ["DB_DATABASE_1", "DB_DATABASE_2"]:
+        raise ValueError(f"ERROR: Base de datos '{db_name}' no está definida en la configuración.")
 
-    if not all([db_server, db_database, db_username, db_password]):
-        raise EnvironmentError("No están definidas todas las variables de entorno para la base de datos.")
+    db_database = config[db_name]
 
     connection_string = (
-        f"mssql+pyodbc://{db_username}:{db_password}@{db_server}/{db_database}"
-        "?driver=ODBC+Driver+17+for+SQL+Server"
+        f"mssql+pymssql://{db_username}:{db_password}@{db_server}/{db_database}"
     )
     return connection_string
 
 
-def get_engine(echo: bool = False):
-    connection_string = get_db_connection_string()
+def get_engine(db_name: str, echo: bool = False):
+    connection_string = get_db_connection_string(db_name)
     engine = create_engine(connection_string, echo=echo)
     return engine
 
 
-def get_session():
-    engine = get_engine()
+def get_session(db_name: str):
+    engine = get_engine(db_name)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)()

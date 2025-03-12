@@ -3,7 +3,7 @@ from utils.database_config import get_session
 
 
 def get_envio_status(tracking_number: str):
-    session = get_session()
+    session = get_session("AreaCliente")
     try:
         query = text(f"SELECT * FROM EnviosActivos WHERE Ref_Partida = :tracking_number;")
         result = session.execute(query, {"tracking_number": tracking_number}).fetchone()
@@ -24,7 +24,7 @@ def get_envio_status(tracking_number: str):
 def search_company(query: str):
     print(query)
     print("Entre")
-    session = get_session()
+    session = get_session("BotCotransaAI")
     try:
         sql_query = text("""
             SELECT TOP (1000) 
