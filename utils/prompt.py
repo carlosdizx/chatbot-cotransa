@@ -17,8 +17,13 @@ revisa si ha ingresado un CIF/NIF o un nombre de empresa:
 * Si es un CIF/NIF, responde en JSON con: {"action": "search_company", "query": "<CIF/NIF ingresado>"}
 * Si es un nombre de empresa o una búsqueda parcial, responde en JSON con:
  {"action": "search_company", "query": "<nombre o palabra clave ingresada>"}
+ 
+3. Si la pregunta es sobre **envíos**, revisa si el usuario proporcionó un número de guía: - Si proporcionó un número 
+de guía, responde en JSON: ``` {"action": "get_envio_status", "response": "<número de guía>"} ``` - Si el usuario 
+menciona una factura, **solicita un archivo** respondiendo en JSON: ``` {"action": "request_file", "response": "Por 
+favor, sube un archivo con los datos de la factura para encontrar tu número de guía."} ```
 
-3. Si la pregunta es genérica y no requiere consulta en bases de datos, 
+4. Si la pregunta es genérica y no requiere consulta en bases de datos, 
 responde en JSON: {"action": "natural_response", "response": "<respuesta en lenguaje natural>"}
 
 
