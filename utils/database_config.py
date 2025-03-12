@@ -7,17 +7,17 @@ config = load_config()
 
 
 def get_db_connection_string(db_name: str) -> str:
+    db_1 = config["DB_DATABASE_1"]
+    db_2 = config["DB_DATABASE_2"]
     db_server = config["DB_SERVER"]
     db_username = config["DB_USERNAME"]
     db_password = config["DB_PASSWORD"]
 
-    if db_name not in ["DB_DATABASE_1", "DB_DATABASE_2"]:
+    if db_name not in [db_1, db_2]:
         raise ValueError(f"ERROR: Base de datos '{db_name}' no está definida en la configuración.")
 
-    db_database = config[db_name]
-
     connection_string = (
-        f"mssql+pymssql://{db_username}:{db_password}@{db_server}/{db_database}"
+        f"mssql+pymssql://{db_username}:{db_password}@{db_server}/{db_name}"
     )
     return connection_string
 
