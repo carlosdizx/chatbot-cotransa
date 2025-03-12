@@ -1,9 +1,12 @@
 from sqlalchemy import text
 from utils.database_config import get_session
+from utils.env_config import load_config
+
+config = load_config()
 
 
 def get_envio_status(tracking_number: str):
-    session = get_session()
+    session = get_session(config["DB_DATABASE_1"])
     try:
         query = text(f"SELECT * FROM EnviosActivos WHERE Ref_Partida = :tracking_number;")
         result = session.execute(query, {"tracking_number": tracking_number}).fetchone()
@@ -22,9 +25,7 @@ def get_envio_status(tracking_number: str):
 
 
 def search_company(query: str):
-    print(query)
-    print("Entre")
-    session = get_session()
+    session = get_session(config["DB_DATABASE_2"])
     try:
         sql_query = text("""
             SELECT TOP (1000) 
@@ -46,15 +47,12 @@ def search_company(query: str):
                 OR Nombre_Empresa LIKE :partial_match
             ORDER BY Match_Probability DESC, Nombre_Empresa;
         """)
-        print(f"sql query {sql_query}")
 
         results = session.execute(sql_query, {
             "query": query,
             "exact_match": query + '%',
             "partial_match": '%' + query + '%'
         }).fetchall()
-
-        print("results", results)
 
         if results:
             response = "### Empresas encontradas:\n\n"
