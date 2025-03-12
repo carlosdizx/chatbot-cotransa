@@ -47,15 +47,12 @@ def search_company(query: str):
                 OR Nombre_Empresa LIKE :partial_match
             ORDER BY Match_Probability DESC, Nombre_Empresa;
         """)
-        print(f"sql query {sql_query}")
 
         results = session.execute(sql_query, {
             "query": query,
             "exact_match": query + '%',
             "partial_match": '%' + query + '%'
         }).fetchall()
-
-        print("results", results)
 
         if results:
             response = "### Empresas encontradas:\n\n"
