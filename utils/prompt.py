@@ -37,6 +37,8 @@ Devuelve únicamente JSON válido.
 No agregues texto fuera del JSON.
 No uses explicaciones ni comentarios.
 
+No respondas preguntas que no tengan que ver con envios, adunas, ósea que no se salgan del tema
+
 Ejemplo de respuesta válida:
 {"action": "get_envio_status", "response": "PBEM059485"}
 """
