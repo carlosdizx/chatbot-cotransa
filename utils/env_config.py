@@ -19,7 +19,6 @@ def load_config() -> dict:
             file.write(error_message)
 
         raise EnvironmentError(error_message)
-
     return {
         "OPEN_AI_API_KEY": os.getenv("OPEN_AI_API_KEY"),
         "MODEL": os.getenv("OPEN_AI_MODEL", 'gpt-4o-mini'),
@@ -30,4 +29,5 @@ def load_config() -> dict:
         "DB_DATABASE_2": os.getenv("DB_DATABASE_2"),
         "DB_USERNAME": os.getenv("DB_USERNAME"),
         "DB_PASSWORD": os.getenv("DB_PASSWORD"),
+        "APP_IS_INTERN": os.getenv("APP_IS_INTERN") == "true",
     }
