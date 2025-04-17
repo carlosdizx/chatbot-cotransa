@@ -8,6 +8,12 @@ from services.pdf_extractor_service import extract_text_from_pdf
 import os
 from utils.prompt import prompt_init, suggestion
 
+config = load_config()
+
+is_intern = config["APP_IS_INTERN"]
+page_title = "Asistente Interno" if is_intern else "Asistente Contransa"
+title_color = "#D35400" if is_intern else "#1F618D"
+
 
 def init_session_state() -> None:
     if "messages" not in st.session_state:
@@ -28,8 +34,7 @@ def display_messages() -> None:
 
 
 def main() -> None:
-    st.title("Asistente Contransa")
-    config = load_config()
+    st.markdown(f"<h1 style='color:{title_color};'>{page_title}</h1>", unsafe_allow_html=True)
 
     chat_service: ChatServiceStrategy = ChatService(
         api_key=config["OPEN_AI_API_KEY"],
