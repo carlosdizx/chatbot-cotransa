@@ -61,7 +61,8 @@ def main() -> None:
 
         if st.button("Procesar archivo"):
             try:
-                file_response = handle_user_query(process_file(file_text, chat_service))
+                file_response = handle_user_query(process_file(file_text, chat_service).replace("json", "")
+                                                  .replace("```", ""))
                 st.session_state["messages"].append({"role": "assistant", "content": file_response})
                 with st.chat_message("assistant"):
                     st.markdown(file_response)
@@ -78,7 +79,8 @@ def main() -> None:
         try:
             with st.status("Procesando tu consulta...", expanded=True) as status:
                 provider_response = chat_service.generate_response(st.session_state["messages"])
-                response = handle_user_query(provider_response)
+                response = handle_user_query(provider_response.replace("json", "")
+                                             .replace("```", ""))
                 status.update(label="¡Respuesta generada!", state="complete", expanded=False)
         except Exception as e:
             st.error(str(e))
