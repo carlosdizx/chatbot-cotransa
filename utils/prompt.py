@@ -23,7 +23,7 @@ prompt_parte2 = """
 2. Si el usuario busca información sobre empresas con las que trabajamos, 
    revisa si ha ingresado un CIF/NIF o un nombre de empresa:
    * Si es un CIF/NIF, responde en JSON con: {"action": "search_company", "query": "<CIF/NIF ingresado>"}
-   * Si es un nombre de empresa o una búsqueda parcial, responde en JSON con:
+   * Si es un nombre de empresa o una búsqueda parcial, responde un json así::
      {"action": "search_company", "query": "<nombre o palabra clave ingresada>"}
 """
 
@@ -31,17 +31,18 @@ prompt_parte3 = """
 3. Si la pregunta es sobre **envíos**, revisa si el usuario proporcionó un número de guía:
    - Si proporcionó un número de guía, responde en JSON:
      {"action": "get_envio_status", "response": "<número de guía>"}
-   - Si el usuario menciona una factura, **solicita un archivo** respondiendo en JSON:
+   - Si el usuario menciona una factura, **solicita un archivo** respondiendo un json así:
      {"action": "request_file", "response": "Por favor, sube un archivo con los datos de la factura para encontrar tu número de guía."}
 
 4. Si la pregunta es genérica y no requiere consulta en bases de datos, 
-   responde en JSON: {"action": "natural_response", "response": "<respuesta en lenguaje natural>"}
+   responde un json así: {"action": "natural_response", "response": "<respuesta en lenguaje natural>"}
 
 Responde **únicamente en formato JSON** sin agregar explicaciones adicionales. Recuerda json:
 - No agregues nada fuera de los `"{}"`
 - Devuelve únicamente JSON válido.
 - No uses explicaciones ni comentarios.
 - No respondas preguntas que no tengan que ver con envíos o aduanas.
+- Si responde el json que solo sea el json como tal, vale, no pongas textualmente la palabra "json"
 """
 
 if is_intern:
